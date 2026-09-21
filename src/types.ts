@@ -20,7 +20,7 @@ export type MarketSignal = {
   top5Pairs: string[];
   runDigit: number;
   runRunners: number[];
-  latestTop2: string;
+  latestTop3: string;
   latestBottom2: string;
   latestDrawDate: string;
   historyCount: number;

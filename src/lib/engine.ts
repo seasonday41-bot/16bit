@@ -39,6 +39,7 @@ export function predictMarket(
     .filter((row) => row.market_id === market.id)
     .map((row) => ({
       ...row,
+      top3: String(row.top3).padStart(3, "0").slice(-3),
       top2: top2(row.top3),
       bottom2: bottom2(row.bottom2),
     }))
@@ -203,7 +204,7 @@ export function predictMarket(
     top5Pairs: pairRank.slice(0, 5).map(padPair),
     runDigit: runRank[0],
     runRunners: runRank.slice(1, 3),
-    latestTop2: last.top2,
+    latestTop3: last.top3,
     latestBottom2: last.bottom2,
     latestDrawDate: last.draw_date,
     historyCount: history.length,

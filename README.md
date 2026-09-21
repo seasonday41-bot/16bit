@@ -36,3 +36,8 @@ npm run build
 ## Model note
 
 The signal engines are experimental statistical models. Historical backtests do not guarantee future results.
+
+
+## Home Screen / PWA
+
+The app includes a web app manifest, Apple touch icon, favicon, standalone mobile display mode, and a pixel-number font for a 16-bit home-screen experience.

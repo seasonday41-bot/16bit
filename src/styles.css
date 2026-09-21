@@ -5,18 +5,18 @@
   background: #0b0e13;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
-  --bg: #0b0e13;
-  --panel: #141924;
-  --panel-2: #1a2130;
-  --line: #9eafbd;
-  --line-soft: #3a4655;
-  --text: #eff5f7;
-  --muted: #93a1ad;
-  --mint: #8df7c1;
-  --yellow: #ffd86b;
-  --cyan: #8edcff;
-  --danger: #ff8b8b;
-  --shadow: #05070a;
+  --bg: #0d0714;
+  --panel: #1a1027;
+  --panel-2: #241233;
+  --line: #8e6ab7;
+  --line-soft: #4a315f;
+  --text: #fff2ff;
+  --muted: #b69ac4;
+  --mint: #ff4fd8;
+  --yellow: #d98cff;
+  --cyan: #b26cff;
+  --danger: #ff7aa8;
+  --shadow: #08030d;
 }
 
 * {
@@ -83,7 +83,7 @@ button {
   font-size: clamp(21px, 7vw, 34px);
   line-height: 1;
   color: var(--text);
-  text-shadow: 2px 2px 0 #314050;
+  text-shadow: 2px 2px 0 #5a2b73;
 }
 
 .status-box {
@@ -139,7 +139,7 @@ button {
 }
 
 .search-box input::placeholder {
-  color: #677483;
+  color: #8e739f;
 }
 
 .filter-strip {
@@ -166,7 +166,7 @@ button {
 }
 
 .filter-chip.is-active {
-  color: #08100d;
+  color: #16071a;
   border-color: var(--mint);
   background: var(--mint);
 }
@@ -175,7 +175,7 @@ button {
   margin: 2px 0 14px;
   padding: 11px 12px;
   border: 2px solid var(--yellow);
-  background: #1d1b15;
+  background: #211126;
   box-shadow: 3px 3px 0 var(--shadow);
 }
 
@@ -199,8 +199,8 @@ button {
 .upcoming-items span {
   flex: 0 0 auto;
   padding-right: 10px;
-  border-right: 1px solid #5c5031;
-  color: #e8e1cd;
+  border-right: 1px solid #6c3a78;
+  color: #f6e8fb;
   font-family: -apple-system, BlinkMacSystemFont, "Noto Sans Thai", sans-serif;
   font-size: 12px;
   white-space: nowrap;
@@ -289,9 +289,9 @@ button {
 .pair-row strong {
   min-width: 42px;
   padding: 7px 8px;
-  border: 2px solid #415064;
-  background: #10151e;
-  color: #eaf2f5;
+  border: 2px solid #604071;
+  background: #13091b;
+  color: #f9efff;
   text-align: center;
   font-size: 16px;
   font-variant-numeric: tabular-nums;
@@ -335,7 +335,7 @@ button {
   width: 72px;
   height: 72px;
   border: 3px solid var(--mint);
-  background: #0e1714;
+  background: #1a0820;
   color: var(--mint);
   font-size: 38px;
   font-weight: 900;
@@ -355,7 +355,7 @@ button {
   gap: 6px 10px;
   padding: 9px 14px;
   border-bottom: 1px solid var(--line-soft);
-  color: #738292;
+  color: #9d82ad;
   font-family: -apple-system, BlinkMacSystemFont, "Noto Sans Thai", sans-serif;
   font-size: 10px;
 }
@@ -373,7 +373,7 @@ button {
   min-height: 48px;
   margin: 12px;
   border: 2px solid var(--mint);
-  background: #12251d;
+  background: #2a0b2f;
   color: var(--mint);
   font-weight: 900;
   letter-spacing: 0.12em;
@@ -388,7 +388,7 @@ button {
 
 .copy-button--copied {
   background: var(--mint);
-  color: #07100c;
+  color: #1a0719;
 }
 
 .not-ready,
@@ -418,7 +418,7 @@ button {
 
 .error-panel {
   border-color: var(--danger);
-  color: #d4d8dc;
+  color: #f0e4f4;
   text-align: left;
 }
 
@@ -437,7 +437,7 @@ button {
   height: 9px;
   margin-right: 8px;
   background: var(--cyan);
-  box-shadow: 12px 0 0 #486f82, 24px 0 0 #273b45;
+  box-shadow: 12px 0 0 #7b3a92, 24px 0 0 #4c245d;
 }
 
 .app-footer {
@@ -446,7 +446,7 @@ button {
   gap: 12px;
   margin-top: 24px;
   padding: 14px 2px 4px;
-  color: #5f6c77;
+  color: #7e668b;
   font-size: 8px;
 }
 

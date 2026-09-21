@@ -1,6 +1,13 @@
 import type { Market, MarketBundle, MarketResult } from "../types";
 
-const PAGE_SIZE = 1000;
+const HISTORY_LIMIT = 30;
+const RPC_BATCH_SIZE = 8;
+
+type RecentResultRow = {
+  draw_date: string;
+  top3: string;
+  bottom2: string;
+};
 
 function getConfig() {
   const url = import.meta.env.VITE_SUPABASE_URL?.replace(/\/$/, "");
@@ -15,32 +22,52 @@ function getConfig() {
   return { url, key };
 }
 
-function headers(key: string, range?: string): HeadersInit {
-  const h: Record<string, string> = {
+function baseHeaders(key: string): Record<string, string> {
+  const headers: Record<string, string> = {
     apikey: key,
     Accept: "application/json",
   };
 
   if (key.split(".").length === 3) {
-    h.Authorization = `Bearer ${key}`;
+    headers.Authorization = `Bearer ${key}`;
   }
 
-  if (range) {
-    h.Range = range;
-  }
-
-  return h;
+  return headers;
 }
 
-async function getJson<T>(path: string, range?: string): Promise<T> {
+async function getJson<T>(path: string): Promise<T> {
   const { url, key } = getConfig();
   const response = await fetch(`${url}/rest/v1/${path}`, {
-    headers: headers(key, range),
+    headers: baseHeaders(key),
   });
 
   if (!response.ok) {
     const detail = await response.text();
     throw new Error(`Supabase ${response.status}: ${detail}`);
+  }
+
+  return response.json() as Promise<T>;
+}
+
+async function rpcJson<T>(
+  functionName: string,
+  body: Record<string, unknown>
+): Promise<T> {
+  const { url, key } = getConfig();
+  const response = await fetch(`${url}/rest/v1/rpc/${functionName}`, {
+    method: "POST",
+    headers: {
+      ...baseHeaders(key),
+      "Content-Type": "application/json",
+      "Content-Profile": "xgen_private",
+      "Accept-Profile": "xgen_private",
+    },
+    body: JSON.stringify(body),
+  });
+
+  if (!response.ok) {
+    const detail = await response.text();
+    throw new Error(`Supabase RPC ${response.status}: ${detail}`);
   }
 
   return response.json() as Promise<T>;
@@ -52,20 +79,30 @@ async function fetchMarkets(): Promise<Market[]> {
   );
 }
 
-async function fetchArchive(): Promise<MarketResult[]> {
+async function fetchMarketHistory(market: Market): Promise<MarketResult[]> {
+  const rows = await rpcJson<RecentResultRow[]>("recent_results", {
+    p_market_key: market.market_key,
+    p_limit: HISTORY_LIMIT,
+  });
+
+  return rows.map((row) => ({
+    market_id: market.id,
+    draw_date: row.draw_date,
+    top3: row.top3,
+    bottom2: row.bottom2,
+    recorded_at: null,
+  }));
+}
+
+async function fetchAllHistory(markets: Market[]): Promise<MarketResult[]> {
   const output: MarketResult[] = [];
 
-  for (let from = 0; ; from += PAGE_SIZE) {
-    const to = from + PAGE_SIZE - 1;
-    const page = await getJson<MarketResult[]>(
-      "xgen_market_result_archive?select=market_id,draw_date,top3,bottom2,recorded_at&order=draw_date.asc,recorded_at.asc",
-      `${from}-${to}`
-    );
+  for (let index = 0; index < markets.length; index += RPC_BATCH_SIZE) {
+    const batch = markets.slice(index, index + RPC_BATCH_SIZE);
+    const results = await Promise.all(batch.map(fetchMarketHistory));
 
-    output.push(...page);
-
-    if (page.length < PAGE_SIZE) {
-      break;
+    for (const rows of results) {
+      output.push(...rows);
     }
   }
 
@@ -73,11 +110,11 @@ async function fetchArchive(): Promise<MarketResult[]> {
 }
 
 export async function loadMarketBundle(): Promise<MarketBundle> {
-  const [markets, results] = await Promise.all([fetchMarkets(), fetchArchive()]);
-  const activeIds = new Set(markets.map((market) => market.id));
+  const markets = await fetchMarkets();
+  const results = await fetchAllHistory(markets);
 
   return {
     markets,
-    results: results.filter((row) => activeIds.has(row.market_id)),
+    results,
   };
 }

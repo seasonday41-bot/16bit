@@ -59,8 +59,6 @@ async function rpcJson<T>(
     headers: {
       ...baseHeaders(key),
       "Content-Type": "application/json",
-      "Content-Profile": "xgen_private",
-      "Accept-Profile": "xgen_private",
     },
     body: JSON.stringify(body),
   });
@@ -80,7 +78,7 @@ async function fetchMarkets(): Promise<Market[]> {
 }
 
 async function fetchMarketHistory(market: Market): Promise<MarketResult[]> {
-  const rows = await rpcJson<RecentResultRow[]>("recent_results", {
+  const rows = await rpcJson<RecentResultRow[]>("signal_recent_results", {
     p_market_key: market.market_key,
     p_limit: HISTORY_LIMIT,
   });

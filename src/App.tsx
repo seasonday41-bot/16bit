@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { loadMarketBundle } from "./lib/data";
 import { MIN_HISTORY, predictMarket } from "./lib/engine";
+import { updateForwardRecords } from "./lib/run-records";
 import { getUpcomingMarkets, MARKET_TIMES } from "./lib/schedule";
 import type { Market, MarketBundle, MarketSignal } from "./types";
 
@@ -190,6 +191,15 @@ export default function App() {
 
     return map;
   }, [bundle]);
+
+  useEffect(() => {
+    if (!bundle) return;
+    try {
+      updateForwardRecords(signals, bundle.results, window.localStorage);
+    } catch {
+      // Private browsing or storage limits must not block the signal board.
+    }
+  }, [bundle, signals]);
 
   const visibleMarkets = useMemo(() => {
     if (!bundle) return [];

@@ -33,10 +33,15 @@ describe("predictMarket", () => {
     expect(signal).not.toBeNull();
     expect(signal?.top3Pairs).toHaveLength(3);
     expect(signal?.top5Pairs).toHaveLength(5);
+    expect(signal?.top3Pairs).toEqual(["72", "28", "76"]);
+    expect(signal?.top5Pairs).toEqual(["72", "28", "76", "24", "20"]);
+    expect(signal?.top3Pairs).toEqual(signal?.top5Pairs.slice(0, 3));
     expect(new Set(signal?.top5Pairs).size).toBe(5);
     expect(signal?.runDigit).toBeGreaterThanOrEqual(0);
     expect(signal?.runDigit).toBeLessThanOrEqual(9);
     expect(signal?.runRunners).toHaveLength(2);
+    expect(new Set([signal?.runDigit, ...signal!.runRunners]).size).toBe(3);
+    expect(signal?.runDiagnostics.backtest).toHaveLength(10);
   });
 
   it("waits until at least 20 historical draws exist", () => {

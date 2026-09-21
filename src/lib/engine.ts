@@ -1,4 +1,5 @@
 import type { Market, MarketResult, MarketSignal } from "../types";
+import { predictRunV2 } from "./run-engine";
 
 const LAMBDA = 0.96;
 export const MIN_HISTORY = 20;
@@ -129,81 +130,21 @@ export function predictMarket(
 
   const pairRank = rank(pairEnsemble);
 
-  const runLong = new Float64Array(10);
-  const runRecent = new Float64Array(10);
-  const runTransition = new Float64Array(10);
-
-  for (let index = 0; index < history.length; index += 1) {
-    const age = history.length - 1 - index;
-    const weight = Math.pow(LAMBDA, age);
-
-    for (const pair of [history[index].top2, history[index].bottom2]) {
-      const uniqueDigits = new Set(pairDigits(pair));
-
-      for (const digit of uniqueDigits) {
-        runLong[digit] += weight;
-      }
-
-      if (index >= history.length - 10) {
-        for (const digit of uniqueDigits) {
-          runRecent[digit] += 1;
-        }
-      }
-    }
-  }
-
-  const previousDigits = new Set([
-    ...pairDigits(last.top2),
-    ...pairDigits(last.bottom2),
-  ]);
-  const transitions = Array.from(
-    { length: 10 },
-    () => new Float64Array(10)
+  const run = predictRunV2(
+    history.map((row) => ({
+      top2: row.top2,
+      bottom2: row.bottom2,
+      drawDate: row.draw_date,
+    }))
   );
-
-  for (let index = 1; index < history.length; index += 1) {
-    const sourceDigits = new Set([
-      ...pairDigits(history[index - 1].top2),
-      ...pairDigits(history[index - 1].bottom2),
-    ]);
-    const currentDigits = new Set([
-      ...pairDigits(history[index].top2),
-      ...pairDigits(history[index].bottom2),
-    ]);
-
-    for (const sourceDigit of sourceDigits) {
-      for (const currentDigit of currentDigits) {
-        transitions[sourceDigit][currentDigit] += 1;
-      }
-    }
-  }
-
-  for (const sourceDigit of previousDigits) {
-    for (let digit = 0; digit < 10; digit += 1) {
-      runTransition[digit] += transitions[sourceDigit][digit];
-    }
-  }
-
-  const maxRunLong = maxOrOne(runLong);
-  const maxRunRecent = maxOrOne(runRecent);
-  const maxRunTransition = maxOrOne(runTransition);
-  const runScore = new Float64Array(10);
-
-  for (let digit = 0; digit < 10; digit += 1) {
-    runScore[digit] =
-      0.5 * (runLong[digit] / maxRunLong) +
-      0.3 * (runRecent[digit] / maxRunRecent) +
-      0.2 * (runTransition[digit] / maxRunTransition);
-  }
-
-  const runRank = rank(runScore);
 
   return {
     market,
     top3Pairs: pairRank.slice(0, 3).map(padPair),
     top5Pairs: pairRank.slice(0, 5).map(padPair),
-    runDigit: runRank[0],
-    runRunners: runRank.slice(1, 3),
+    runDigit: run.primary,
+    runRunners: run.runners,
+    runDiagnostics: run.diagnostics,
     latestTop3: last.top3,
     latestBottom2: last.bottom2,
     latestDrawDate: last.draw_date,

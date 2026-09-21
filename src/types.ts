@@ -1,3 +1,5 @@
+import type { RunDiagnostics } from "./lib/run-engine";
+
 export type Market = {
   id: string;
   market_key: string;
@@ -20,6 +22,7 @@ export type MarketSignal = {
   top5Pairs: string[];
   runDigit: number;
   runRunners: number[];
+  runDiagnostics: RunDiagnostics;
   latestTop3: string;
   latestBottom2: string;
   latestDrawDate: string;

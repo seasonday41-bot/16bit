@@ -32,6 +32,12 @@ function matchesFilter(market: Market, filter: FilterKey): boolean {
   return STOCK_WORDS.some((word) => name.includes(word));
 }
 
+function formatDrawDate(value: string): string {
+  const [year, month, day] = value.split("-");
+  if (!year || !month || !day) return value;
+  return `${day}/${month}/${year}`;
+}
+
 function copyText(signal: MarketSignal): string {
   return [
     signal.market.market_name,
@@ -122,8 +128,9 @@ function MarketCard({
 
           <div className="market-meta">
             <span>DATA {signal.historyCount}</span>
+            <span>งวดล่าสุด {formatDrawDate(signal.latestDrawDate)}</span>
             <span>
-              LAST {signal.latestTop2}-{signal.latestBottom2}
+              ผลล่าสุด {signal.latestTop2}-{signal.latestBottom2}
             </span>
           </div>
 

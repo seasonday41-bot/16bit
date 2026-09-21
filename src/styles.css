@@ -1,6 +1,6 @@
 :root {
   color-scheme: dark;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-family: -apple-system, BlinkMacSystemFont, "Noto Sans Thai", sans-serif;
   color: #eff5f7;
   background: #0b0e13;
   font-synthesis: none;
@@ -68,8 +68,25 @@ button {
 .result-count,
 .upcoming-title,
 .app-footer,
+.status-box,
+.topbar h1,
+.market-card time,
+.pair-row strong,
+.run-main,
+.runner-up,
+.market-meta,
+.copy-button {
+  font-family: "Press Start 2P", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  letter-spacing: 0.04em;
+}
+
+.brand-kicker,
+.market-key,
+.signal-label,
+.result-count,
+.upcoming-title,
+.app-footer,
 .status-box {
-  letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
@@ -208,7 +225,7 @@ button {
 
 .upcoming-items strong {
   color: var(--yellow);
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-family: "Press Start 2P", ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 
 .result-count {
@@ -308,7 +325,8 @@ button {
   padding: 10px 8px;
   border-color: var(--cyan);
   color: var(--cyan);
-  font-size: 23px;
+  font-size: 18px;
+  line-height: 1.55;
 }
 
 .run-block {
@@ -337,7 +355,7 @@ button {
   border: 3px solid var(--mint);
   background: #1a0820;
   color: var(--mint);
-  font-size: 38px;
+  font-size: 30px;
   font-weight: 900;
   line-height: 1;
   box-shadow: 4px 4px 0 var(--shadow);
@@ -345,7 +363,8 @@ button {
 
 .runner-up {
   color: var(--yellow);
-  font-size: 13px;
+  font-size: 10px;
+  line-height: 1.6;
 }
 
 .market-meta {
@@ -475,5 +494,36 @@ button {
 @media (min-width: 1180px) {
   .market-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+
+/* Pixel-number treatment: Thai remains readable via glyph fallback. */
+.pair-row strong,
+.run-main,
+.market-card time,
+.status-box strong,
+.market-meta span,
+.copy-button {
+  -webkit-font-smoothing: none;
+  font-smooth: never;
+  text-rendering: geometricPrecision;
+}
+
+.market-meta {
+  line-height: 1.65;
+}
+
+@media (max-width: 420px) {
+  .pair-row--large strong {
+    font-size: 16px;
+  }
+
+  .run-main {
+    font-size: 28px;
+  }
+
+  .market-meta {
+    font-size: 8px;
   }
 }

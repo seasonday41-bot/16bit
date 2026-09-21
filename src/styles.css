@@ -135,7 +135,7 @@ button {
   color: var(--text);
   background: transparent;
   font-family: -apple-system, BlinkMacSystemFont, "Noto Sans Thai", sans-serif;
-  font-size: 15px;
+  font-size: 16px;
 }
 
 .search-box input::placeholder {
@@ -350,12 +350,22 @@ button {
 
 .market-meta {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
-  gap: 8px;
-  padding: 8px 14px;
+  gap: 6px 10px;
+  padding: 9px 14px;
   border-bottom: 1px solid var(--line-soft);
-  color: #657483;
-  font-size: 9px;
+  color: #738292;
+  font-family: -apple-system, BlinkMacSystemFont, "Noto Sans Thai", sans-serif;
+  font-size: 10px;
+}
+
+.market-meta span:nth-child(2) {
+  color: var(--yellow);
+}
+
+.market-meta span:last-child {
+  color: var(--cyan);
 }
 
 .copy-button {

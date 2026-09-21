@@ -130,7 +130,7 @@ function MarketCard({
             <span>DATA {signal.historyCount}</span>
             <span>งวดล่าสุด {formatDrawDate(signal.latestDrawDate)}</span>
             <span>
-              ผลล่าสุด {signal.latestTop2}-{signal.latestBottom2}
+              ผลล่าสุด {signal.latestTop3}-{signal.latestBottom2}
             </span>
           </div>
 

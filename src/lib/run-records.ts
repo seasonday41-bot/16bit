@@ -12,6 +12,9 @@ export type ForwardRecord = {
   bottomScore: number;
   confidenceGap: number;
   confidenceBucket: MarketSignal["runDiagnostics"]["confidenceBucket"];
+  crossSignalSwitched?: boolean;
+  crossSignalReason?: string;
+  crossSignalBasePrimary?: number;
   targetDrawDate?: string;
   hitTop?: boolean;
   hitBottom?: boolean;
@@ -81,6 +84,9 @@ export function updateForwardRecords(
       bottomScore: signal.runDiagnostics.bottom.score,
       confidenceGap: signal.runDiagnostics.confidenceGap,
       confidenceBucket: signal.runDiagnostics.confidenceBucket,
+      crossSignalSwitched: signal.runDiagnostics.crossSignal?.switched,
+      crossSignalReason: signal.runDiagnostics.crossSignal?.reason,
+      crossSignalBasePrimary: signal.runDiagnostics.crossSignal?.basePrimary,
     });
     changed = true;
   }

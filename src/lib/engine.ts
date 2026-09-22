@@ -1,4 +1,5 @@
 import type { Market, MarketResult, MarketSignal } from "../types";
+import { reconcileRunWithPairs } from "./cross-signal";
 import { predictRunV2 } from "./run-engine";
 
 const LAMBDA = 0.96;
@@ -129,19 +130,22 @@ export function predictMarket(
   }
 
   const pairRank = rank(pairEnsemble);
+  const top3Pairs = pairRank.slice(0, 3).map(padPair);
+  const top5Pairs = pairRank.slice(0, 5).map(padPair);
 
-  const run = predictRunV2(
+  const baseRun = predictRunV2(
     history.map((row) => ({
       top2: row.top2,
       bottom2: row.bottom2,
       drawDate: row.draw_date,
     }))
   );
+  const run = reconcileRunWithPairs(baseRun, top3Pairs, top5Pairs);
 
   return {
     market,
-    top3Pairs: pairRank.slice(0, 3).map(padPair),
-    top5Pairs: pairRank.slice(0, 5).map(padPair),
+    top3Pairs,
+    top5Pairs,
     runDigit: run.primary,
     runRunners: run.runners,
     runDiagnostics: run.diagnostics,

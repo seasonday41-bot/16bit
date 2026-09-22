@@ -21,6 +21,25 @@ export type BacktestRecord = {
   hitEither: boolean;
 };
 
+export type CrossSignalReason =
+  | "strong_run_lead"
+  | "run_pair_agreement"
+  | "challenger_pair_support"
+  | "base_final_score_leads"
+  | "no_eligible_challenger";
+
+export type CrossSignalDiagnostics = {
+  basePrimary: number;
+  finalPrimary: number;
+  switched: boolean;
+  reason: CrossSignalReason;
+  runScores: number[];
+  pairScores: number[];
+  finalScores: number[];
+  agreementBonuses: number[];
+  top3Support: number[];
+};
+
 export type RunDiagnostics = {
   top: SideDiagnostics;
   bottom: SideDiagnostics;
@@ -30,6 +49,7 @@ export type RunDiagnostics = {
   agreementBoost: number;
   confidenceGap: number;
   confidenceBucket: "LOW" | "MID" | "HIGH";
+  crossSignal?: CrossSignalDiagnostics;
   backtest: BacktestRecord[];
 };
 
